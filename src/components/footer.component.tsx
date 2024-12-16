@@ -31,8 +31,8 @@ export function Footer() {
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-            <p className="text-gray-400">Email: info@example.com</p>
-            <p className="text-gray-400">Phone: +1 (555) 123-4567</p>
+            <p className="text-gray-400">Email: ghifarialdhy@mail.com</p>
+            <p className="text-gray-400">Phone: +62 (812) 345-6789</p>
             <div className="flex gap-4 mt-4">
               {["facebook", "twitter", "instagram"].map((social) => (
                 <Link key={social} href={`/${social}`}>
