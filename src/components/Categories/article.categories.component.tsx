@@ -8,6 +8,7 @@ import {
   IContentfulAsset,
   TypeBlogPostSkeleton,
 } from "@/contentful/types/blogPost.type";
+import { Asset } from "contentful";
 
 export default function ArticlesCategories({
   selectedCategory = "All",
@@ -28,9 +29,9 @@ export default function ArticlesCategories({
 
       const articles = data.items.map((item) => {
         const imageUrl =
-          item.fields.image && "file" in item.fields.image.fields
-            ? item.fields.image.fields.file.url
-            : null;
+          (item.fields.image &&
+            (item.fields.image as Asset).fields?.file?.url) ||
+          null;
 
         return {
           id: item.sys.id,
