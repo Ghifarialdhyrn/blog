@@ -73,11 +73,13 @@ export function Articles({ searchQuery, sortBy }: any) {
             className="shadow-lg rounded-lg overflow-hidden transform transition-all hover:scale-105 relative bg-white"
           >
             <div className="w-full h-48 overflow-hidden">
-              <img
-                src={`${
+              <Image
+                src={`https://${
                   (post.fields.image as IContentfulAsset)?.fields.file.url
                 }`}
                 alt="Post Thumbnail"
+                width={500}
+                height={500}
                 className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
               />
             </div>

@@ -5,15 +5,20 @@ import {
   IContentfulAsset,
   TypeBlogPostSkeleton,
 } from "@/contentful/types/blogPost.type";
+import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function HeroArticlePage() {
   const params = useParams<{ slug: string }>();
-  const [article, setArticle] = useState<any>();
+  const [article, setArticle] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchArticle = async () => {
+    if (!params.slug) return;
+
+    setLoading(true);
     try {
       const data = await contentfulClient.getEntries<TypeBlogPostSkeleton>({
         content_type: "blogPost",
@@ -21,15 +26,26 @@ export function HeroArticlePage() {
         "fields.slug": params.slug,
       });
 
-      setArticle(data.items[0].fields);
+      const fetchedArticle = data.items[0]?.fields;
+      setArticle(fetchedArticle || {});
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching article:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchArticle();
-  }, []);
+  }, [params.slug]);
+
+  if (loading) {
+    return (
+      <div className="text-center mt-10">
+        <p>Loading article...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-10">
@@ -45,12 +61,16 @@ export function HeroArticlePage() {
 
       {/* Hero Section */}
       <div className="relative w-full max-w-[1467px] h-[500px] mx-auto text-white rounded-lg overflow-hidden">
-        {article && (
+        {article && article.image ? (
           <div className="relative w-full h-full">
             {/* Background Image */}
-            <img
-              src={(article.image as IContentfulAsset)?.fields.file.url}
+            <Image
+              src={`https://${
+                (article.image as IContentfulAsset)?.fields.file.url
+              }`}
               alt="Post Thumbnail"
+              width={500}
+              height={500}
               className="absolute top-0 left-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-black bg-opacity-50" />
@@ -77,6 +97,8 @@ export function HeroArticlePage() {
               </div>
             </div>
           </div>
+        ) : (
+          <div className="text-center text-gray-400">No image available</div>
         )}
       </div>
     </div>

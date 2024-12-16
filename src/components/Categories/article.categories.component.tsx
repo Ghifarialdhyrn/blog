@@ -19,7 +19,6 @@ export default function ArticlesCategories({
   const [filteredArticles, setFilteredArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch articles from Contentful
   const fetchArticles = async () => {
     setLoading(true);
     try {
@@ -49,7 +48,6 @@ export default function ArticlesCategories({
           ? articles
           : articles.filter((article) => article.category === selectedCategory);
 
-      // Apply search filter
       if (searchQuery) {
         setFilteredArticles(
           filtered.filter((article) =>
@@ -72,14 +70,11 @@ export default function ArticlesCategories({
     fetchArticles();
   }, [selectedCategory, searchQuery]);
 
-  // Calculate paginated articles
   const startIdx = (currentPage - 1) * articlesPerPage;
   const endIdx = startIdx + articlesPerPage;
   const paginatedArticles = filteredArticles.slice(startIdx, endIdx);
-
   const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
 
-  // Skeleton card placeholder
   const SkeletonCard = () => (
     <div className="relative bg-gray-200 max-w-[350px] min-h-[400px] w-full p-4 rounded-lg shadow-lg animate-pulse">
       <div className="w-full h-52 bg-gray-300 rounded-t-md"></div>
@@ -115,9 +110,11 @@ export default function ArticlesCategories({
                 >
                   <div className="relative">
                     {article.image ? (
-                      <img
-                        src={article.image}
+                      <Image
+                        src={`https://${article.image}`}
                         alt="Post Thumbnail"
+                        width={500}
+                        height={500}
                         className="w-full h-52 object-cover rounded-t-md"
                       />
                     ) : (
