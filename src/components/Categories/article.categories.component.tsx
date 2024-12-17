@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import contentfulClient from "@/contentful/contentfulClient";
 import {
   IContentfulAsset,
   TypeBlogPostSkeleton,
 } from "@/contentful/types/blogPost.type";
 import { Asset } from "contentful";
+import contentfulClient from "@/contentful/contentfulClient";
 
 export default function ArticlesCategories({
   selectedCategory = "All",
@@ -26,7 +26,7 @@ export default function ArticlesCategories({
         content_type: "blogPost",
       });
 
-      const articles = data.items.map((item) => {
+      const articles = data.items.map((item: any) => {
         const imageUrl =
           (item.fields.image &&
             (item.fields.image as Asset).fields?.file?.url) ||
@@ -46,11 +46,13 @@ export default function ArticlesCategories({
       const filtered =
         selectedCategory === "All"
           ? articles
-          : articles.filter((article) => article.category === selectedCategory);
+          : articles.filter(
+              (article: any) => article.category === selectedCategory
+            );
 
       if (searchQuery) {
         setFilteredArticles(
-          filtered.filter((article) =>
+          filtered.filter((article: any) =>
             article.title.toLowerCase().includes(searchQuery.toLowerCase())
           )
         );
