@@ -16,11 +16,11 @@ export async function getStaticProps() {
 
     const posts = data.items.map((item) => ({
       id: item.sys.id,
-      title: item.fields.title,
-      slug: item.fields.slug,
-      author: item.fields.author,
-      date: item.fields.date,
-      image: (item.fields.image as IContentfulAsset)?.fields.file.url || null,
+      title: item.fields.title || "Untitled Post",
+      slug: item.fields.slug || "",
+      author: item.fields.author || "Unknown Author",
+      date: item.fields.date || "Unknown Date",
+      image: (item.fields.image as IContentfulAsset)?.fields?.file?.url || null,
     }));
 
     return {
@@ -65,18 +65,19 @@ export function Articles({ searchQuery, sortBy }: any) {
   // Filter posts based on search query
   useEffect(() => {
     let filtered = posts.filter((post) =>
-      post.fields.title.toLowerCase().includes(searchQuery.toLowerCase())
+      (post.title || "")
+        .toLowerCase()
+        .includes((searchQuery || "").toLowerCase())
     );
 
-    // Sort posts based on selected filter (name or date)
     if (sortBy === "name") {
       filtered = filtered.sort((a, b) =>
-        a.fields.title.localeCompare(b.fields.title)
+        (a.title || "").localeCompare(b.title || "")
       );
     } else if (sortBy === "date") {
       filtered = filtered.sort(
         (a, b) =>
-          new Date(b.fields.date).getTime() - new Date(a.fields.date).getTime()
+          new Date(b.date || "").getTime() - new Date(a.date || "").getTime()
       );
     }
 
@@ -93,28 +94,32 @@ export function Articles({ searchQuery, sortBy }: any) {
             className="shadow-lg rounded-lg overflow-hidden transform transition-all hover:scale-105 relative bg-white"
           >
             <div className="w-full h-48 overflow-hidden">
-              <Image
-                src={`https://${
-                  (post.fields.image as IContentfulAsset)?.fields.file.url
-                }`}
-                alt="Post Thumbnail"
-                width={500}
-                height={500}
-                className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-              />
+              {post.image ? (
+                <Image
+                  src={`https://${post.image}`}
+                  alt={post.title || "No Title"}
+                  width={500}
+                  height={500}
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                  <p>No Image Available</p>
+                </div>
+              )}
             </div>
             <div className="p-4 flex flex-col h-40 justify-between">
               <h2 className="font-bold text-lg mb-2 text-gray-800">
-                {post.fields.title}
+                {post.title || "Untitled Post"}
               </h2>
               <div className="flex items-center text-sm text-gray-600 mb-4">
                 <Image src="/user1.png" alt="author" width={30} height={30} />
-                <p className="ml-2">{post.fields.author}</p>
+                <p className="ml-2">{post.author || "Unknown Author"}</p>
                 <span className="mx-2">|</span>
-                <p>{post.fields.date}</p>
+                <p>{post.date || "Unknown Date"}</p>
               </div>
               <Link
-                href={`/blog-page/${post.fields.slug}`}
+                href={`/blog-page/${post.slug}`}
                 className="text-blue-600 font-bold hover:underline self-start"
               >
                 View Post

@@ -100,7 +100,7 @@ export default function PostsHome() {
                 <p>{post.fields.date}</p>
               </div>
               <Link
-                href="/blog-page"
+                href={`/blog-page/${post.fields.slug}`}
                 className="text-blue-600 font-bold hover:underline self-start"
               >
                 View Post
