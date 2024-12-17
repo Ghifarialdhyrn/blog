@@ -1,4 +1,4 @@
-// articles.tsx
+"use client";
 import contentfulClient from "@/contentful/contentfulClient";
 import {
   IContentfulAsset,
