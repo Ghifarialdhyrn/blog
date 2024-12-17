@@ -8,15 +8,35 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const getBlogPostsContentful = async () => {
+export async function getStaticProps() {
   try {
-    const data = await contentfulClient.getEntries<TypeBlogPostSkeleton>();
-    return data.items;
-  } catch (err) {
-    console.error(err);
-    return [];
+    const data = await contentfulClient.getEntries<TypeBlogPostSkeleton>({
+      content_type: "blogPost",
+    });
+
+    const posts = data.items.map((item) => ({
+      id: item.sys.id,
+      title: item.fields.title,
+      slug: item.fields.slug,
+      author: item.fields.author,
+      date: item.fields.date,
+      image: (item.fields.image as IContentfulAsset)?.fields.file.url || null,
+    }));
+
+    return {
+      props: {
+        posts,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      props: {
+        posts: [],
+      },
+    };
   }
-};
+}
 
 export function Articles({ searchQuery, sortBy }: any) {
   const [posts, setPosts] = useState<any[]>([]);
@@ -34,9 +54,9 @@ export function Articles({ searchQuery, sortBy }: any) {
   // Fetch data and apply search/filter logic
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getBlogPostsContentful();
-      setPosts(data);
-      setFilteredPosts(data);
+      const data = await getStaticProps();
+      setPosts(data.props.posts);
+      setFilteredPosts(data.props.posts);
     };
 
     fetchData();
