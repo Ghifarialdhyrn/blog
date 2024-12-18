@@ -95,8 +95,8 @@ export function Articles({ searchQuery, sortBy }: any) {
           >
             <div className="w-full h-48 overflow-hidden">
               {post.image ? (
-                <Image
-                  src={`https://${post.image}`}
+                <img
+                  src={post.image}
                   alt={post.title || "No Title"}
                   width={500}
                   height={500}

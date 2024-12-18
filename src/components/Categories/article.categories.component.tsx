@@ -3,10 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  IContentfulAsset,
-  TypeBlogPostSkeleton,
-} from "@/contentful/types/blogPost.type";
+import { TypeBlogPostSkeleton } from "@/contentful/types/blogPost.type";
 import { Asset } from "contentful";
 import contentfulClient from "@/contentful/contentfulClient";
 
@@ -112,8 +109,8 @@ export default function ArticlesCategories({
                 >
                   <div className="relative">
                     {article.image ? (
-                      <Image
-                        src={`https://${article.image}`}
+                      <img
+                        src={article.image}
                         alt="Post Thumbnail"
                         width={500}
                         height={500}

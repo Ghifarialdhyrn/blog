@@ -83,10 +83,8 @@ export default function PostsHome() {
             className="shadow-lg rounded-lg overflow-hidden transform transition-all hover:scale-105 relative bg-white"
           >
             <div className="w-full h-48 overflow-hidden">
-              <Image
-                src={`https://${
-                  (post.fields.image as IContentfulAsset)?.fields.file.url
-                }`}
+              <img
+                src={(post.fields.image as IContentfulAsset)?.fields?.file?.url}
                 alt="Post Thumbnail"
                 width={500}
                 height={500}

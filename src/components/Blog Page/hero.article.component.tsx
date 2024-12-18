@@ -64,10 +64,8 @@ export function HeroArticlePage() {
         {article && article.image ? (
           <div className="relative w-full h-full">
             {/* Background Image */}
-            <Image
-              src={`https://${
-                (article.image as IContentfulAsset)?.fields.file.url
-              }`}
+            <img
+              src={(article.image as IContentfulAsset).fields.file.url}
               alt="Post Thumbnail"
               width={500}
               height={500}
