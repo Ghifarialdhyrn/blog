@@ -11,9 +11,13 @@ import {
 
 const getBlogPostsContentful = async () => {
   try {
-    const data = await contentfulClient.getEntries<TypeBlogPostSkeleton>();
-    console.log(data.items[0]);
-    return data.items; // Return only the items for easier handling
+    // Mengambil hanya data dari Content Type 'Program'
+    const data = await contentfulClient.getEntries<TypeBlogPostSkeleton>({
+      content_type: "blogPost", // Ganti dengan ID Content Type yang sesuai
+    });
+
+    console.log(data.items); // Menampilkan data yang diambil
+    return data.items; // Mengembalikan hanya items yang diperlukan
   } catch (err) {
     console.error(err);
     return [];
